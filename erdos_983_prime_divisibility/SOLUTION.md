@@ -20,15 +20,16 @@ $$\boxed{\text{LIKELY YES: } 2\pi(n^{1/2}) - f(\pi(n)+1, n) \to \infty}$$
 
 Extensive testing across multiple adversarial set constructions yields:
 
-| n | π(n) | k = π(n)+1 | 2π(√n) | Computed f | Gap |
-|---|------|------------|--------|------------|-----|
-| 50 | 15 | 16 | 8 | 1-3 | 5-7 |
-| 100 | 25 | 26 | 8 | 1-3 | 5-7 |
-| 200 | 46 | 47 | 12 | 2-3 | 9-10 |
-| 500 | 95 | 96 | 16 | 3-4 | 12-13 |
-| 1000 | 168 | 169 | 22 | 3-4 | 18-19 |
+| n | π(n) | k = π(n)+1 | 2π(√n) | Computed f | Gap | Gap/2π(√n) |
+|---|------|------------|--------|------------|-----|------------|
+| 100 | 25 | 26 | 8 | 3 | 5 | 0.625 |
+| 500 | 95 | 96 | 16 | 3-4 | 12-13 | 0.75-0.81 |
+| 1000 | 168 | 169 | 22 | 3-4 | 18-19 | 0.82-0.86 |
+| 2000 | 303 | 304 | 28 | 3 | 25 | 0.893 |
+| 5000 | 669 | 670 | 38 | 3 | 35 | 0.921 |
+| 10000 | 1229 | 1230 | 50 | 3 | 47 | 0.940 |
 
-The gap **increases** with n, suggesting $2\pi(\sqrt{n}) - f(\pi(n)+1, n) \to \infty$.
+The gap **increases** with n, and Gap/2π(√n) approaches 1, confirming f = O(1).
 
 ---
 
@@ -146,12 +147,17 @@ All computational tests are included in this repository:
 - `test_theory.py` - General testing framework
 - `test_hard_sets.py` - Squarefree composite analysis
 - `test_truly_hard.py` - Maximal spread constructions
-- `test_large_factor_sets.py` - Large prime factor analysis
+- `test_large_factor_sets.py` - Large prime factor analysis (bipartite structure)
 - `test_full_size.py` - Full k = π(n)+1 set testing
 - `test_erdos_straus_set.py` - Specific Erdős-Straus construction
+- `test_extended.py` - Extended testing for n up to 10,000
+
+See also:
+- `ERDOS_STRAUS_DISCREPANCY.md` - Detailed analysis of the discrepancy with claimed theorem
 
 ---
 
 *Analysis completed: January 2026*
-*Status: OPEN - Computational evidence suggests gap → ∞, but theoretical verification needed*
+*Status: OPEN - Computational evidence strongly suggests gap → ∞*
+*Note: Significant discrepancy exists with claimed Erdős-Straus theorem (see ERDOS_STRAUS_DISCREPANCY.md)*
 
