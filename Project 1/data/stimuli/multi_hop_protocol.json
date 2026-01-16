@@ -1,0 +1,51 @@
+{
+  "experiment_name": "Multi-Hop Document Reasoning",
+  "version": "1.0",
+  "date_created": "2026-01-16T05:00:42.395378",
+  "description": "\n            Tests multi-step reasoning through structured documents by\n            embedding reasoning chains that require following relationships\n            across multiple sections.\n        ",
+  "hypotheses": [
+    "H1: Accuracy decreases linearly (or worse) with hop count",
+    "H2: Explicit cross-references yield higher accuracy than implicit",
+    "H3: Structured format markers improve multi-hop performance",
+    "H4: Error analysis will show most failures at early hops (chain breaks)",
+    "H5: Mixed chains perform between explicit and implicit"
+  ],
+  "independent_variables": [
+    {
+      "name": "num_hops",
+      "levels": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "chain_type",
+      "levels": [
+        "explicit",
+        "implicit",
+        "mixed"
+      ]
+    },
+    {
+      "name": "format",
+      "levels": [
+        "markdown",
+        "structured"
+      ]
+    }
+  ],
+  "dependent_variables": [
+    {
+      "name": "accuracy",
+      "type": "binary"
+    },
+    {
+      "name": "error_type",
+      "type": "categorical"
+    }
+  ],
+  "total_trials": 72,
+  "analysis_plan": "\n            1. Accuracy by hop count (test H1)\n            2. Accuracy by chain type (test H2, H5)\n            3. Accuracy by format (test H3)\n            4. Error pattern analysis (test H4)\n            5. Interaction: hops x chain_type\n        "
+}
