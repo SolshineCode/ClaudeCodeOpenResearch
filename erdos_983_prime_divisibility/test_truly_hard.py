@@ -11,34 +11,8 @@ The hardest sets should have:
 import math
 from itertools import combinations
 from typing import Set, List, Tuple
-import random
 
-def sieve_of_eratosthenes(n: int) -> List[int]:
-    if n < 2:
-        return []
-    is_prime = [True] * (n + 1)
-    is_prime[0] = is_prime[1] = False
-    for i in range(2, int(n**0.5) + 1):
-        if is_prime[i]:
-            for j in range(i*i, n + 1, i):
-                is_prime[j] = False
-    return [i for i in range(2, n + 1) if is_prime[i]]
-
-def prime_factors(n: int, primes: List[int]) -> Set[int]:
-    if n <= 1:
-        return set()
-    factors = set()
-    temp = n
-    for p in primes:
-        if p * p > temp:
-            break
-        if temp % p == 0:
-            factors.add(p)
-            while temp % p == 0:
-                temp //= p
-    if temp > 1:
-        factors.add(temp)
-    return factors
+from utils import sieve_of_eratosthenes, prime_factors
 
 def is_squarefree(n: int, primes: List[int]) -> bool:
     if n <= 1:
@@ -145,8 +119,8 @@ def construct_hardest_set(n: int, k: int, primes: List[int]) -> Tuple[List[Set[i
     used_primes = set()
 
     # First pass: prefer elements that introduce NEW primes
-    remaining = list(sq_composites)
-    random.shuffle(remaining)
+    # Sort deterministically by number of factors (descending), then by value
+    remaining = sorted(sq_composites, key=lambda x: (-len(x[1]), x[0]))
 
     while len(selected) < k and remaining:
         # Find element with most new primes
@@ -271,8 +245,8 @@ def test_pure_semiprime_sets(n: int):
     selected = []
     used_primes = set()
 
-    remaining = list(semiprimes)
-    random.shuffle(remaining)
+    # Sort deterministically by value for reproducibility
+    remaining = sorted(semiprimes, key=lambda x: x[0])
 
     while len(selected) < k and remaining:
         # Prefer semiprimes with maximum new primes

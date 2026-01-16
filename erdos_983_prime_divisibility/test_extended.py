@@ -9,32 +9,8 @@ from itertools import combinations
 from typing import Set, List, Tuple
 import time
 
-def sieve_of_eratosthenes(n: int) -> List[int]:
-    if n < 2:
-        return []
-    is_prime = [True] * (n + 1)
-    is_prime[0] = is_prime[1] = False
-    for i in range(2, int(n**0.5) + 1):
-        if is_prime[i]:
-            for j in range(i*i, n + 1, i):
-                is_prime[j] = False
-    return [i for i in range(2, n + 1) if is_prime[i]]
+from utils import sieve_of_eratosthenes, prime_factors
 
-def prime_factors(n: int, primes: List[int]) -> Set[int]:
-    if n <= 1:
-        return set()
-    factors = set()
-    temp = n
-    for p in primes:
-        if p * p > temp:
-            break
-        if temp % p == 0:
-            factors.add(p)
-            while temp % p == 0:
-                temp //= p
-    if temp > 1:
-        factors.add(temp)
-    return factors
 
 def is_covered(factors: Set[int], prime_set: Set[int]) -> bool:
     """Element is covered if ALL its prime factors are in prime_set."""
@@ -104,9 +80,8 @@ def construct_pure_squarefree_set(n: int, k: int, primes: List[int]) -> Tuple[Li
             if (m, factors) not in sq_composites:
                 sq_composites.append((m, factors))
 
-    # Select with maximum spread
-    import random
-    random.shuffle(sq_composites)
+    # Select with maximum spread - sort by number of factors (descending) for determinism
+    sq_composites.sort(key=lambda x: (-len(x[1]), x[0]))
 
     selected = []
     used_primes = set()
@@ -323,6 +298,4 @@ def main():
     print("\nAnswer to Erdős's question: LIKELY YES")
 
 if __name__ == "__main__":
-    import random
-    random.seed(42)
     main()
