@@ -1,0 +1,124 @@
+{
+  "experiment_name": "Adversarial Edge Case Probes",
+  "version": "1.0",
+  "date_created": "2026-01-16T06:17:55.937373",
+  "description": "\n            Adversarial probes designed to expose specific weaknesses in\n            LLM document understanding. Each probe targets a known or\n            suspected failure mode.\n        ",
+  "categories": {
+    "structural_ambiguity": "Documents with unclear or ambiguous hierarchy",
+    "semantic_interference": "Similar content designed to cause confusion",
+    "positional_bias": "Exploiting primacy/recency effects",
+    "format_breaking": "Edge cases in format parsing",
+    "reasoning_trap": "Logic puzzles requiring careful tracking"
+  },
+  "probes": [
+    {
+      "probe_id": "SA_001",
+      "category": "structural_ambiguity",
+      "name": "Orphaned Content",
+      "description": "Tests whether model correctly identifies that 'Important note' belongs to Phase 1 or is document-level",
+      "difficulty": "medium",
+      "target_weakness": "Tendency to associate content with following rather than preceding section",
+      "trap_answer": "Phase 2"
+    },
+    {
+      "probe_id": "SA_002",
+      "category": "structural_ambiguity",
+      "name": "Competing Hierarchies",
+      "description": "Tests handling of ambiguous subsection placement",
+      "difficulty": "hard",
+      "target_weakness": "Assuming well-formed hierarchy when structure is ambiguous",
+      "trap_answer": "1"
+    },
+    {
+      "probe_id": "SA_003",
+      "category": "structural_ambiguity",
+      "name": "Depth Confusion",
+      "description": "Tests handling of non-sequential header depths",
+      "difficulty": "medium",
+      "target_weakness": "Conflating visual position with explicit depth markers",
+      "trap_answer": "Level 2"
+    },
+    {
+      "probe_id": "SI_001",
+      "category": "semantic_interference",
+      "name": "Similar Entities",
+      "description": "Tests disambiguation of similarly-named entities",
+      "difficulty": "easy",
+      "target_weakness": "Stopping at first match without checking qualifiers",
+      "trap_answer": "$95,000 (Engineering John Smith)"
+    },
+    {
+      "probe_id": "SI_002",
+      "category": "semantic_interference",
+      "name": "Updated Values",
+      "description": "Tests whether model uses corrected or original values",
+      "difficulty": "medium",
+      "target_weakness": "Using first-encountered value instead of tracking updates",
+      "trap_answer": "$1.2M (original value)"
+    },
+    {
+      "probe_id": "SI_003",
+      "category": "semantic_interference",
+      "name": "Negation Trap",
+      "description": "Tests correct processing of CAN vs CANNOT",
+      "difficulty": "medium",
+      "target_weakness": "Missing negations when similar positive statements exist",
+      "trap_answer": "Yes"
+    },
+    {
+      "probe_id": "PB_001",
+      "category": "positional_bias",
+      "name": "Primacy Trap",
+      "description": "Tests whether late-document corrections override earlier repeated information",
+      "difficulty": "hard",
+      "target_weakness": "Over-weighting information that appears multiple times early",
+      "trap_answer": "8080"
+    },
+    {
+      "probe_id": "PB_002",
+      "category": "positional_bias",
+      "name": "Recency Trap",
+      "description": "Tests whether informal last-mentioned info overrides formal decisions",
+      "difficulty": "medium",
+      "target_weakness": "Over-weighting recent/last information regardless of authority",
+      "trap_answer": "April"
+    },
+    {
+      "probe_id": "FB_001",
+      "category": "format_breaking",
+      "name": "Markdown in Code",
+      "description": "Tests whether markdown inside code blocks is incorrectly parsed as structure",
+      "difficulty": "medium",
+      "target_weakness": "Parsing structure inside code blocks",
+      "trap_answer": "4 (including the ones in the code block)"
+    },
+    {
+      "probe_id": "FB_002",
+      "category": "format_breaking",
+      "name": "Nested Quotes",
+      "description": "Tests attribution tracking through nested quotations",
+      "difficulty": "hard",
+      "target_weakness": "Tracking corrections within quoted speech",
+      "trap_answer": "Q2 (her initial statement)"
+    },
+    {
+      "probe_id": "RT_001",
+      "category": "reasoning_trap",
+      "name": "Conditional Cascade",
+      "description": "Tests multi-step conditional reasoning with order of operations",
+      "difficulty": "hard",
+      "target_weakness": "Order of operations in multi-step calculations",
+      "trap_answer": "$7.50 (incorrectly applying discount to base then doubling)"
+    },
+    {
+      "probe_id": "RT_002",
+      "category": "reasoning_trap",
+      "name": "Exception to Exception",
+      "description": "Tests handling of nested exceptions and overrides",
+      "difficulty": "hard",
+      "target_weakness": "Tracking exception priority and overrides",
+      "trap_answer": "Yes (CEO is C-level)"
+    }
+  ],
+  "total_probes": 12
+}
