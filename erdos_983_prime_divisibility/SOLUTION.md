@@ -12,9 +12,14 @@ Let $n \geq 2$ and $\pi(n) < k \leq n$. Define $f(k,n)$ as the smallest integer 
 
 ### Main Finding (Based on Computational Evidence)
 
-$$\boxed{\text{LIKELY YES: } 2\pi(n^{1/2}) - f(\pi(n)+1, n) \to \infty}$$
+$$\boxed{\text{UNCERTAIN - Requires further investigation}}$$
 
-**Caveat:** This contradicts the stated Erdős-Straus asymptotic. Further verification of the problem definition is recommended.
+**Computational tests for n ≤ 10,000 show f ≈ 3-4, which would suggest the gap grows. However, this contradicts the Erdős-Straus theorem and may reflect:**
+1. A non-asymptotic regime (n too small)
+2. Failure to construct the TRUE hardest adversarial sets
+3. A definition mismatch with the original problem
+
+**See `HONEST_ASSESSMENT.md` for a critical self-review of potential flaws in this analysis.**
 
 ### Computational Evidence
 
@@ -131,13 +136,15 @@ The function f transitions from O(1) to log log n as k grows from π(n)+1 to Θ(
 
 **Answer to Erdős Problem #983 (Main Question):**
 
-Based on computational evidence, the answer is **LIKELY YES:**
+$$\boxed{\text{UNKNOWN}}$$
 
-$$2\pi(n^{1/2}) - f(\pi(n)+1, n) \to \infty \text{ as } n \to \infty$$
+Computational evidence for n ≤ 10,000 shows f ≈ 3-4, which would imply the gap grows to infinity. However, critical self-review reveals potential flaws:
 
-The gap grows approximately like $\sqrt{n}/\log n$.
+1. **May not have found true adversarial sets** - My constructions may miss the Erdős-Straus adversarial configuration
+2. **Possible non-asymptotic regime** - n = 10,000 may be too small for asymptotic behavior
+3. **Rectangle-free sets are possible** - For large n, adversaries can avoid coverage-enhancing patterns
 
-**Important Caveat:** This conclusion contradicts the stated Erdős-Straus asymptotic. Verification of the original problem definition and further investigation for larger n is strongly recommended.
+**The honest position:** The discrepancy with Erdős-Straus is real and interesting, but I cannot confidently claim to have resolved it. Clarification from experts is needed.
 
 ---
 
@@ -151,13 +158,15 @@ All computational tests are included in this repository:
 - `test_full_size.py` - Full k = π(n)+1 set testing
 - `test_erdos_straus_set.py` - Specific Erdős-Straus construction
 - `test_extended.py` - Extended testing for n up to 10,000
+- `critical_review.py` - Self-critical analysis of potential flaws
 
 See also:
-- `ERDOS_STRAUS_DISCREPANCY.md` - Detailed analysis of the discrepancy with claimed theorem
+- `ERDOS_STRAUS_DISCREPANCY.md` - Analysis of discrepancy with claimed theorem
+- `HONEST_ASSESSMENT.md` - Critical self-review of this analysis
 
 ---
 
 *Analysis completed: January 2026*
-*Status: OPEN - Computational evidence strongly suggests gap → ∞*
-*Note: Significant discrepancy exists with claimed Erdős-Straus theorem (see ERDOS_STRAUS_DISCREPANCY.md)*
+*Status: UNCERTAIN - Interesting computational findings, but cannot claim resolution*
+*Note: Discrepancy with Erdős-Straus theorem requires expert clarification*
 
