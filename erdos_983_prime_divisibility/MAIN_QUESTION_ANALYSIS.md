@@ -146,17 +146,24 @@ Products like 6=2·3 would allow 2 primes to cover an element, breaking the cons
 ## Conclusion
 
 Given:
-- Lower bound: f ≥ t + 1 = π((2-ε)√n) + 1 ≈ 2π(√n) - O(1)
+- Lower bound: f ≥ t + 1 = π((2-ε)√n) + 1
 - Upper bound: f ≤ 2π(√n) + 1
 - Verified: f = 9 = t + 1 for n = 100 (matching 2π(√10) + 1 = 9)
 
-**Answer: LIKELY NO**
+**CORRECTION:** The bounds are NOT tight for large n!
 
-The gap 2π(√n) - f is O(1), bounded by a constant.
+Using PNT:
+- Lower bound ≈ (4-2ε)√n/ln n
+- Upper bound ≈ 4√n/ln n
+- Gap between bounds ≈ 2ε√n/ln n → ∞ for fixed ε
 
-Specifically: 2π(√n) - f ≈ 2π(√n) - (2π(√n) + O(1)) = O(1)
+**Answer: UNCERTAIN**
 
-The Erdős-Straus bounds are tight enough that f ≈ 2π(√n) with only bounded error.
+The answer depends on WHERE f lies between the bounds:
+- If f tracks upper bound: gap ≈ O(1), answer is NO
+- If f tracks lower bound: gap ≈ 2ε√n/ln n → ∞, answer is YES
+
+The n=100 case is special (bounds coincide). For large n, more analysis is needed.
 
 ---
 
