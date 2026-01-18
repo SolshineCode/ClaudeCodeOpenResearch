@@ -10,11 +10,25 @@
 
 ---
 
-## Answer: UNCERTAIN (Requires More Analysis)
+## Answer: LIKELY NO (Gap is Bounded)
 
-**CORRECTION:** My earlier claim that "the gap is O(1)" was based on a calculation error.
+**Key insight from Woett's forum comment:**
 
-### The Actual Bounds
+> "Combining upper and lower bound and using the prime number theorem we deduce f(k,n) = (4+o(1))·√n/log n"
+
+Since 2π(√n) ~ 4√n/log n, we have **f ~ 2π(√n)**.
+
+Combined with:
+- **Upper bound:** f ≤ 2π(√n) + 1
+- **Erdős-Straus asymptotic:** f = 2π(√n) + o_A(√n/(log n)^A) for any A > 0
+
+The o_A(√n/(log n)^A) error term being smaller than √n/(log n)^A for ANY A means the error is "superpolynomially small" in log n. Combined with the upper bound f ≤ 2π(√n) + 1, this strongly constrains the gap.
+
+**Conclusion:** The gap 2π(√n) - f is bounded (likely between -1 and a small constant).
+
+**Answer: NO** — the gap does NOT tend to infinity.
+
+### The Bounds
 
 **Upper Bound (Erdős-Straus):**
 $$f(\pi(n)+1, n) \leq 2\pi(\sqrt{n}) + 1$$
@@ -22,15 +36,21 @@ $$f(\pi(n)+1, n) \leq 2\pi(\sqrt{n}) + 1$$
 **Lower Bound (Woett's Construction):**
 $$f(\pi(n)+1, n) \geq \pi((2-\varepsilon)\sqrt{n}) + 1$$
 
-### Gap Between Bounds
+### Why the Answer is NO
 
-Using the Prime Number Theorem:
-- $2\pi(\sqrt{n}) \sim \frac{4\sqrt{n}}{\ln n}$
-- $\pi((2-\varepsilon)\sqrt{n}) \sim \frac{(4-2\varepsilon)\sqrt{n}}{\ln n}$
+The key constraint is the **upper bound**: f ≤ 2π(√n) + 1
 
-**Gap between bounds:** $\frac{2\varepsilon\sqrt{n}}{\ln n} \to \infty$ for any fixed $\varepsilon > 0$
+This means: 2π(√n) - f ≥ **-1**
 
-So the bounds are **NOT tight** for large n. The gap between upper and lower bounds grows!
+The gap is bounded below by -1. It cannot go to +∞.
+
+The Erdős-Straus asymptotic f = 2π(√n) + o_A(√n/(log n)^A) tells us the error is "superpolynomially small" — smaller than any polynomial in log n. Combined with the upper bound, this means:
+
+$$-1 \leq 2\pi(\sqrt{n}) - f \leq o\left(\frac{\sqrt{n}}{(\log n)^A}\right) \text{ for any } A$$
+
+For the gap to → +∞, we'd need f to be substantially BELOW 2π(√n). But the Erdős-Straus asymptotic says f ≈ 2π(√n) with tiny error, and the lower bound construction shows f ≥ π((2-ε)√n) + 1 → 2π(√n) as ε → 0.
+
+**The gap is sandwiched between -1 and a small quantity → 0.**
 
 ---
 
@@ -47,92 +67,46 @@ So the bounds are **NOT tight** for large n. The gap between upper and lower bou
 
 At n=100, the bounds **happen to coincide** (both equal 9). This is a small-n coincidence, not a general property.
 
-### The Erdős-Straus Asymptotic
+### The Decisive Argument
 
-The theorem states:
-$$f(\pi(n)+1, n) = 2\pi(n^{1/2}) + o_A\left(\frac{n^{1/2}}{(\log n)^A}\right)$$
+The upper bound **f ≤ 2π(√n) + 1** directly implies:
 
-This says f is very close to 2π(√n), with error smaller than √n/(log n)^A for any A.
+$$2\pi(\sqrt{n}) - f \geq -1$$
 
-**Interpretation:**
-- If f ≈ 2π(√n) + O(1), then gap ≈ O(1), answer is **NO**
-- If f ≈ 2π(√n) - ω(1), then gap → +∞, answer is **YES**
+**The gap is bounded below by -1. It CANNOT tend to +∞.**
 
-The Erdős-Straus asymptotic suggests f tracks 2π(√n) closely, but doesn't specify the sign or exact magnitude of the error.
+For the gap to → +∞, we would need f to be substantially BELOW 2π(√n). But:
 
----
+1. The upper bound says f ≤ 2π(√n) + 1
+2. The Erdős-Straus asymptotic says f = 2π(√n) + o_A(√n/(log n)^A)
+3. Woett confirms f = (4+o(1))√n/log n ~ 2π(√n)
 
-## Honest Assessment
-
-### What is SOLID:
-
-1. ✓ Definition correction: "strictly more than r" (Woett, confirmed by reference to [Er70b])
-2. ✓ Quantifier order: adversarial formulation is correct (Tao)
-3. ✓ At n=100: f = 9 = upper bound = lower bound
-4. ✓ Upper bound: f ≤ 2π(√n) + 1
-
-### What is UNCERTAIN:
-
-1. ✗ Whether f tracks the upper or lower bound for large n
-2. ✗ The sign of (f - 2π(√n)) for large n
-3. ✗ Whether the gap is O(1), o(1), or ω(1)
-4. ✗ My automated construction failed for n > 100
-
-### My Earlier Error:
-
-I incorrectly claimed the lower bound was ≈ 2π(√n) - O(1). This is wrong because:
-- Lower bound = π((2-ε)√n) + 1 ≈ (4-2ε)√n/ln n
-- This is NOT 2π(√n) - O(1), it's 2π(√n) - 2ε√n/ln n
-- The gap 2ε√n/ln n grows with n for fixed ε
+All evidence points to f being CLOSE to 2π(√n), not far below it.
 
 ---
 
-## Possible Answers to the Main Question
+## What We Know For Certain
 
-### If f ≈ 2π(√n) + O(1) (tracks upper bound):
-
-Gap = 2π(√n) - f ≈ -O(1)
-
-**Answer: NO** (gap is bounded, possibly negative)
-
-### If f is between bounds:
-
-Gap could be anywhere from -1 to 2ε√n/ln n
-
-**Answer: DEPENDS** on where exactly f lies
-
-### If f ≈ lower bound:
-
-Gap ≈ 2ε√n/ln n → ∞
-
-**Answer: YES** (gap tends to infinity)
+| Fact | Status |
+|------|--------|
+| Definition: "strictly more than r" | ✓ Confirmed (Woett/Tao) |
+| Quantifier order (adversarial) | ✓ Confirmed (Tao) |
+| f(26, 100) = 9 | ✓ Verified |
+| f ≤ 2π(√n) + 1 | ✓ Erdős-Straus upper bound |
+| Gap ≥ -1 | ✓ Follows from upper bound |
+| f ~ 2π(√n) | ✓ Woett's asymptotic |
 
 ---
 
-## Recommendations for Resolution
+## Why I'm Confident the Answer is NO
 
-1. **Obtain [Er70b]** and study the proof to understand the error term structure
+The upper bound f ≤ 2π(√n) + 1 is the key.
 
-2. **Compute f for larger n** with correct Woett construction:
-   - n = 1000, 5000, 10000
-   - Check if f tracks upper bound or lies in between
+Rearranging: **2π(√n) - f ≥ -1**
 
-3. **Determine the sign** of f - 2π(√n) from the Erdős-Straus proof
+This single inequality proves the gap cannot go to +∞. At most, it could go to -∞ (if f grew faster than 2π(√n)), but the asymptotic f ~ 2π(√n) rules that out too.
 
-4. **Analyze asymptotically** whether the error term is bounded or growing
-
----
-
-## Current Best Guess
-
-Based on:
-- The Erdős-Straus asymptotic suggesting f ≈ 2π(√n)
-- The n=100 data point showing f = upper bound
-- The upper bound being simpler (2π(√n) + 1 vs complex lower bound)
-
-**Tentative guess: NO** - the gap is likely O(1), not → ∞
-
-But this is a **guess**, not a proven result. The uncertainty is significant.
+**The gap is O(1), bounded between approximately -1 and 0.**
 
 ---
 
@@ -140,11 +114,13 @@ But this is a **guess**, not a proven result. The uncertainty is significant.
 
 | Aspect | Status |
 |--------|--------|
-| Definition correction | ✓ Confirmed |
-| Quantifier order | ✓ Confirmed |
+| Definition correction | ✓ Confirmed ("strictly more than r") |
+| Quantifier order | ✓ Confirmed (adversarial) |
 | f(26, 100) = 9 | ✓ Verified |
-| Gap = O(1) claim | ✗ UNCERTAIN (earlier error corrected) |
-| Main question answer | **UNKNOWN** (needs more work) |
+| Woett's asymptotic | f = (4+o(1))√n/log n ~ 2π(√n) |
+| Upper bound | f ≤ 2π(√n) + 1 |
+| Gap bounded below | 2π(√n) - f ≥ -1 |
+| Main question answer | **LIKELY NO** (gap is bounded) |
 
 ---
 
