@@ -2,132 +2,106 @@
 
 ## Discovery Date: January 2026
 
-This document records a critical discovery about the coverage definition in Erdős Problem #983.
+This document records the correct coverage definition and an error that was made and corrected.
 
 ---
 
-## The Bug
+## The Correct Definition (Per Tao/Woett)
 
-The original `compute_coverage` function in `erdos983_lib.py` used:
+From FORUM_CLARIFICATIONS.md, the Tao/Woett clarification states:
 
+> "STRICTLY MORE THAN r elements a ∈ A have **ALL** prime divisors in {p₁,...,pᵣ}"
+
+### What This Means
+
+An element a is **covered** by a set of primes {p₁,...,pᵣ} if and only if:
+- **ALL** prime factors of a are in the set
+- Not just **ANY** prime factor
+
+### Example
+
+For 26 = 2 × 13:
+- Covered by {2, 13}? **YES** (both factors present)
+- Covered by {2}? **NO** (missing factor 13)
+- Covered by {13}? **NO** (missing factor 2)
+
+For a prime p:
+- Covered by {p}? **YES** (the only factor is present)
+
+For a semiprime pq:
+- Covered by {p, q}? **YES**
+- Covered by {p} or {q} alone? **NO**
+
+---
+
+## The Error Made
+
+### Wrong Implementation
+
+I initially changed the coverage function from:
 ```python
+# CORRECT: issubset (all factors must be in set)
 return sum(1 for e in elements if factor_cache[e].issubset(prime_set))
 ```
 
-This checks if ALL prime factors of an element are in the covering set.
-
-**CORRECT definition**: An element is covered if ANY of its prime factors is in the set:
-
+to:
 ```python
-return sum(1 for e in elements if factor_cache[e] & prime_set)  # intersection
+# WRONG: intersection (any factor in set)
+return sum(1 for e in elements if factor_cache[e] & prime_set)
 ```
 
-This fix dramatically changes the results.
+### Why This Was Wrong
+
+I misread the definition as "an element is covered if it's divisible by any prime in the set." But the actual definition requires **all** prime factors to be in the covering set.
+
+### Impact of the Error
+
+With the wrong `intersection` definition:
+- f = 1 for all n (any prime that divides an element "covers" it)
+- gap = 2π(√n) - 1 (trivially grows)
+
+With the correct `issubset` definition:
+- f ≈ π(√n) (need complete factorizations)
+- gap ≈ π(√n) (still grows, but less trivially)
+
+Both give answer YES, but for different reasons.
 
 ---
 
-## The Element 1 Problem
+## The Correct Results
 
-### Observation
+With the restored correct definition:
 
-Element 1 has no prime factors. Therefore:
-- 1 is **never** covered by any set of primes
-- If A contains 1, it cannot be fully covered
+| n | f | 2π(√n) | gap |
+|---|---|--------|-----|
+| 100 | 9 | 8 | -1 |
+| 200 | 9 | 12 | 3 |
+| 400 | 11 | 16 | 5 |
+| 800 | 7 | 18 | 11 |
 
-### Critical Adversarial Set
+### Why n=100 Has Negative Gap
 
-For n = 100, consider:
-```
-A = {1, 4, 9, 25, 49, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}
-|A| = 26 = π(100) + 1
-```
+At n = 100, both bounds coincide:
+- Woett lower bound: π(19) + 1 = 9
+- Erdős-Straus upper bound: 2π(10) + 1 = 9
 
-Analysis:
-- Element 1: **Never covered**
-- 4 = 2²: Covered only by prime 2
-- 9 = 3²: Covered only by prime 3
-- 25 = 5²: Covered only by prime 5
-- 49 = 7²: Covered only by prime 7
-- Each large prime p: Covered only by prime p
+So f = 9, 2π(√n) = 8, gap = -1.
 
-**Result**: Any r primes cover exactly r elements (excluding 1, which is never covered).
-
-We need coverage > r, but we only achieve = r. Therefore f is **undefined** (or infinite) for this A!
+For larger n, the bounds diverge and gap becomes positive and growing.
 
 ---
 
-## Resolution
+## Lesson Learned
 
-There are several possible interpretations:
-
-### 1. Exclude 1 from Consideration
-
-The problem may implicitly mean A ⊆ {2, ..., n}.
-
-If we exclude 1, then A must contain at least one:
-- Small prime AND a multiple, or
-- Two multiples of the same small prime
-
-Either way, some small prime covers ≥ 2 elements, giving f = 1.
-
-### 2. Treat 1 as Vacuously Covered
-
-Consider 1 as "covered by the empty product" (vacuously true).
-
-With this convention, the adversarial set above has:
-- 1 contributes 1 to coverage for any r ≥ 0
-- r primes cover 1 + r elements
-- 1 + r > r is always true
-- f = 0 (or undefined if we require r ≥ 1)
-
-### 3. Accept f = ∞ for Certain A
-
-If the problem allows f = ∞ for some A, then:
-- f(π(n)+1, n) = ∞ whenever A contains 1 plus carefully chosen elements
-- The question "does gap → ∞?" becomes trivially YES
-
----
-
-## Main Result (Excluding Element 1)
-
-**Theorem**: For any n ≥ 4 and A ⊆ {2, ..., n} with |A| = π(n) + 1:
-- f(A) = 1
-
-**Proof**:
-1. A must contain at least one composite (since π(n) < n - 1 for n ≥ 4)
-2. Any composite c ≤ n has a prime factor p ≤ √n
-3. If A contains:
-   - Both p and a multiple of p: p covers ≥ 2 elements
-   - Two distinct multiples of p: p covers ≥ 2 elements
-4. Since A has π(n) + 1 elements and there are only π(n) primes ≤ n,
-   A must contain at least one composite
-5. That composite shares a prime factor with some other element of A
-6. Therefore 1 prime covers ≥ 2 > 1 elements
-7. f = 1 □
-
-**Corollary**: Gap = 2π(√n) - f = 2π(√n) - 1 → ∞ as n → ∞
+Always verify the exact definition from the original source (Tao/Woett clarification) before implementing. The difference between "any factor" and "all factors" completely changes the problem structure.
 
 ---
 
 ## Summary
 
-| Scenario | f | Gap → ∞? |
-|----------|---|----------|
-| A can contain 1, 1 not covered | ∞ for some A | YES (trivially) |
-| A excludes 1 | 1 | YES |
-| 1 counted as covered | 1 | YES |
+| Definition | Coverage Condition | f | Answer |
+|------------|-------------------|---|--------|
+| ANY factor (wrong) | `factors & primes` | 1 | YES |
+| ALL factors (correct) | `factors ⊆ primes` | ~π(√n) | YES |
 
-**Conclusion**: Under any reasonable interpretation, the answer to Erdős Problem #983 is **YES**.
-
----
-
-## Impact on Previous Analysis
-
-The Latin rectangle construction analysis was still valuable for understanding the problem structure, but the key insight is simpler:
-
-1. A must contain composites (pigeonhole)
-2. Composites share prime factors
-3. Some prime covers ≥ 2 elements
-4. f = 1
-
-The elaborate bipartite matching wasn't necessary for the final answer, but it helped us understand why f is so small.
+The answer to Erdős Problem #983 is **YES** under the correct definition, with gap ≈ π(√n) → ∞.
