@@ -94,7 +94,10 @@ def prime_factorization(n: int, primes: List[int]) -> Set[int]:
 def compute_coverage(elements: List[int], prime_set: Set[int],
                      factor_cache: Dict[int, Set[int]]) -> int:
     """
-    Count elements whose ALL prime factors are in the given prime set.
+    Count elements that are divisible by ANY prime in the given prime set.
+
+    An element is covered if at least one of its prime factors is in prime_set.
+    (This is the correct Erdős problem definition.)
 
     Args:
         elements: List of positive integers
@@ -104,7 +107,7 @@ def compute_coverage(elements: List[int], prime_set: Set[int],
     Returns:
         Number of elements covered
     """
-    return sum(1 for e in elements if factor_cache[e].issubset(prime_set))
+    return sum(1 for e in elements if factor_cache[e] & prime_set)
 
 
 def compute_f(A: List[int], primes: List[int], max_r: int = 50) -> Tuple[int, List[int]]:
