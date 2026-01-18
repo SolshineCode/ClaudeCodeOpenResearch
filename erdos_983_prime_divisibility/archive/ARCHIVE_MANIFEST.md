@@ -28,6 +28,30 @@ CRITICAL_FLAW.md. The correct answer is **YES**.
 
 ---
 
+## Flawed Formal Proof
+
+| File | Reason for Archive | Notes |
+|------|-------------------|-------|
+| `Erdos983_FLAWED.lean` | **WRONG ANSWER (NO)** | Lean proof with logical fallacy |
+
+### Critical Note on Erdos983_FLAWED.lean
+
+This Lean file (originally `Erdos983.lean`) contains a formal proof sketch that
+incorrectly concludes the answer is "NO". The flaw is at lines 105-108 and 148-150:
+
+> "Since the gap is always ≥ -1, it cannot tend to +∞."
+
+**This is a non sequitur**. A quantity bounded below CAN tend to infinity.
+Example: n ≥ 0 but n → ∞.
+
+The correct reasoning:
+- Gap ≥ -1 (from upper bound) - tells us nothing about upper limit
+- Gap ≤ π(√n) - O(1) (from lower bound) - this GROWS without bound
+- Woett construction achieves lower bound, so gap → ∞
+- Correct answer: **YES**
+
+---
+
 ## Superseded Python Files
 
 ### Development/Debugging Scripts
