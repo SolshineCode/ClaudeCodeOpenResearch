@@ -87,18 +87,24 @@ def count_covered(elements: List[int], prime_set: Set[int],
 
 def find_f_for_set(elements: List[int], all_primes: List[int],
                    element_factors: Dict[int, Set[int]],
-                   max_r: int = None) -> int:
+                   max_r: int = None,
+                   strict: bool = True) -> int:
     """
-    Find the minimum r such that r primes cover at least r elements.
+    Find the minimum r such that r primes cover the required number of elements.
+
+    IMPORTANT: Per Woett's correction (Oct 2025), the correct Erdős definition
+    requires STRICTLY MORE THAN r elements (coverage > r), not "at least r".
 
     Args:
         elements: The set A to analyze
         all_primes: List of all available primes
         element_factors: Pre-computed mapping of elements to their prime factors
         max_r: Maximum r to try (defaults to len(all_primes))
+        strict: If True, require coverage > r (correct Erdős definition)
+                If False, require coverage >= r (incorrect, for comparison only)
 
     Returns:
-        The minimum r achieving coverage >= r, or -1 if not found
+        The minimum r achieving the required coverage, or -1 if not found
     """
     if max_r is None:
         max_r = min(len(all_primes), len(elements))
@@ -109,8 +115,14 @@ def find_f_for_set(elements: List[int], all_primes: List[int],
         relevant_primes.update(element_factors.get(e, set()))
     relevant_primes = sorted(relevant_primes)
 
+    # Determine the coverage threshold based on strict mode
+    # strict=True: need coverage > r (strictly more than r)
+    # strict=False: need coverage >= r (at least r) - INCORRECT but for comparison
+    def meets_threshold(coverage: int, r: int) -> bool:
+        return coverage > r if strict else coverage >= r
+
     for r in range(1, max_r + 1):
-        # Try to find r primes covering at least r elements
+        # Try to find r primes covering the required number of elements
         # First try greedy approach with relevant primes
         best_coverage = 0
 
@@ -122,7 +134,7 @@ def find_f_for_set(elements: List[int], all_primes: List[int],
                     prime_set = set(prime_combo)
                     coverage = count_covered(elements, prime_set, element_factors)
                     best_coverage = max(best_coverage, coverage)
-                    if coverage >= r:
+                    if meets_threshold(coverage, r):
                         break
 
         # Also try greedy approach
@@ -152,7 +164,7 @@ def find_f_for_set(elements: List[int], all_primes: List[int],
 
             best_coverage = max(best_coverage, len(covered_elements))
 
-        if best_coverage >= r:
+        if meets_threshold(best_coverage, r):
             return r
 
     return -1
