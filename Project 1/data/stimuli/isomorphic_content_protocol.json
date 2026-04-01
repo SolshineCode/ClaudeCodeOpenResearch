@@ -1,0 +1,30 @@
+{
+  "experiment_name": "Isomorphic Content Analysis",
+  "version": "1.0",
+  "date_created": "2026-01-16T05:00:42.395377",
+  "description": "\n            Tests how document format affects LLM understanding of semantically\n            identical information. Same content rendered in 7 different formats\n            with identical probing questions to isolate format effects.\n        ",
+  "hypotheses": [
+    "H1: Structured formats (JSON, XML) yield higher accuracy on property lookups",
+    "H2: Tabular formats (CSV, MD tables) excel at comparison tasks",
+    "H3: Prose formats better for relationship questions",
+    "H4: Aggregate questions should be format-invariant",
+    "H5: Count-with-filter tasks favor explicit structure"
+  ],
+  "formats_tested": [
+    "markdown_prose",
+    "markdown_table",
+    "json",
+    "xml",
+    "yaml",
+    "plain_text",
+    "csv"
+  ],
+  "probe_types": [
+    "entity_property",
+    "relation",
+    "aggregate",
+    "comparison",
+    "count_filter"
+  ],
+  "design": "Within-subject: same content, all formats, same probes"
+}

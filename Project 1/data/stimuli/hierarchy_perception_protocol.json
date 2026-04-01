@@ -1,0 +1,166 @@
+{
+  "experiment_name": "Hierarchy Perception",
+  "version": "1.0",
+  "date_created": "2026-01-16T05:00:42.395272",
+  "description": "\n            This experiment tests LLM ability to perceive and reason about\n            hierarchical document structure. It uses procedurally generated\n            documents with known ground truth to probe specific structural\n            understanding capabilities.\n        ",
+  "hypotheses": [
+    "H1: Accuracy decreases with document depth",
+    "H2: JSON format yields highest accuracy due to explicit structure",
+    "H3: Parent/child relationships are easier than sibling relationships",
+    "H4: Path tracing accuracy depends on path length",
+    "H5: Counting accuracy depends on total count (Weber's law)"
+  ],
+  "independent_variables": [
+    {
+      "name": "document_depth",
+      "levels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "format",
+      "levels": [
+        "markdown",
+        "json",
+        "xml",
+        "text"
+      ]
+    },
+    {
+      "name": "branching_factor",
+      "levels": [
+        "narrow (2-3)",
+        "wide (4-6)"
+      ]
+    },
+    {
+      "name": "probe_type",
+      "levels": [
+        "depth_probe",
+        "parent_probe",
+        "sibling_probe",
+        "leaf_probe",
+        "path_probe",
+        "count_probe"
+      ]
+    }
+  ],
+  "dependent_variables": [
+    {
+      "name": "accuracy",
+      "type": "binary",
+      "description": "Whether response was correct"
+    },
+    {
+      "name": "response",
+      "type": "string",
+      "description": "Raw model response"
+    }
+  ],
+  "controls": [
+    "Randomized node IDs prevent memorization",
+    "Multiple seeds per condition ensure reliability",
+    "Ground truth derived programmatically"
+  ],
+  "procedure": "\n            1. Generate document with specified parameters\n            2. Render document in target format\n            3. Generate probing questions with ground truth\n            4. Present document + question to model\n            5. Parse and evaluate response\n            6. Record all data for analysis\n        ",
+  "analysis_plan": "\n            Primary analyses:\n            - Accuracy by depth (test H1)\n            - Accuracy by format (test H2)\n            - Accuracy by probe type (test H3, H4)\n            - Counting accuracy vs magnitude (test H5)\n\n            Secondary analyses:\n            - Interaction effects (depth x format)\n            - Error pattern analysis\n            - Confidence calibration (if available)\n        ",
+  "configurations": {
+    "shallow": {
+      "name": "shallow",
+      "description": "Test hierarchy perception on shallow documents (depth 1-2)",
+      "seed_range": [
+        1000,
+        1020
+      ],
+      "depth_range": [
+        1,
+        2
+      ],
+      "formats": [
+        "markdown",
+        "json",
+        "xml",
+        "text"
+      ],
+      "probes_per_stimulus": 5,
+      "branching_factor": [
+        2,
+        3
+      ]
+    },
+    "medium": {
+      "name": "medium",
+      "description": "Test hierarchy perception on medium documents (depth 2-4)",
+      "seed_range": [
+        2000,
+        2020
+      ],
+      "depth_range": [
+        2,
+        4
+      ],
+      "formats": [
+        "markdown",
+        "json",
+        "xml",
+        "text"
+      ],
+      "probes_per_stimulus": 5,
+      "branching_factor": [
+        2,
+        3
+      ]
+    },
+    "deep": {
+      "name": "deep",
+      "description": "Test hierarchy perception on deep documents (depth 4-6)",
+      "seed_range": [
+        3000,
+        3020
+      ],
+      "depth_range": [
+        4,
+        6
+      ],
+      "formats": [
+        "markdown",
+        "json",
+        "xml",
+        "text"
+      ],
+      "probes_per_stimulus": 5,
+      "branching_factor": [
+        2,
+        3
+      ]
+    },
+    "wide": {
+      "name": "wide",
+      "description": "Test hierarchy perception on wide documents (high branching)",
+      "seed_range": [
+        4000,
+        4020
+      ],
+      "depth_range": [
+        2,
+        3
+      ],
+      "formats": [
+        "markdown",
+        "json",
+        "xml",
+        "text"
+      ],
+      "probes_per_stimulus": 5,
+      "branching_factor": [
+        4,
+        6
+      ]
+    }
+  }
+}

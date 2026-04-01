@@ -1,0 +1,70 @@
+{
+  "experiment_name": "Needle in Structure",
+  "version": "1.0",
+  "date_created": "2026-01-16T05:00:42.395373",
+  "description": "\n            Tests information retrieval from structured documents with varying:\n            - Needle placement (depth and local position)\n            - Distractor quality (similarity to target)\n            - Document format\n\n            This probes how structural context affects attention/retrieval.\n        ",
+  "hypotheses": [
+    "H1: Headers act as attention anchors - needles after headers easier to find",
+    "H2: Deeper nesting reduces retrieval accuracy",
+    "H3: High-similarity distractors cause more errors than low-similarity",
+    "H4: Explicit structure (XML) aids retrieval vs implicit (plain text)",
+    "H5: Position within section matters (start > end > middle)"
+  ],
+  "independent_variables": [
+    {
+      "name": "needle_depth",
+      "levels": [
+        0,
+        1
+      ],
+      "description": "Nesting level of needle"
+    },
+    {
+      "name": "local_position",
+      "levels": [
+        "start",
+        "middle",
+        "end"
+      ],
+      "description": "Position within section"
+    },
+    {
+      "name": "distractor_similarity",
+      "levels": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "name": "format",
+      "levels": [
+        "markdown",
+        "xml",
+        "text"
+      ]
+    }
+  ],
+  "dependent_variables": [
+    {
+      "name": "accuracy",
+      "type": "binary"
+    },
+    {
+      "name": "response",
+      "type": "string"
+    },
+    {
+      "name": "error_type",
+      "type": "categorical",
+      "levels": [
+        "correct",
+        "distractor",
+        "not_found",
+        "other"
+      ]
+    }
+  ],
+  "total_trials": 72
+}
