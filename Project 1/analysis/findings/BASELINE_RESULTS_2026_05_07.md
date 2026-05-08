@@ -12,7 +12,7 @@ This document supersedes the synthetic-mock predictions in `FINDINGS_LOG.md` for
 
 1. **Default difficulty saturates Haiku 4.5.** Three of five baseline suites hit 100% accuracy; the framework as shipped does not discriminate at this model class. Hierarchy is the lone weak spot at 87.5%, driven entirely by `count_probe` (0/3 correct).
 2. **The strict evaluator is the dominant noise source on adversarial probes.** Substring containment falsely flags 7/12 correct Haiku responses as wrong because the gold answer carries qualifying tails like `'Phase 1 (or arguably document-level/none)'`. With a canonical-answer evaluator, Haiku 4.5 → **83% smart-accuracy on adversarial** (vs 25% strict). Same trial set, same responses, +58 percentage points from a fixed eval.
-3. **Sonnet 4.6 vs Haiku 4.5 inverts under strict eval, holds under smart eval.** Sonnet hits 97.5% on hierarchy (vs 87.5%) and recovers 67% of `count_probe` (vs 0%) — clear lift on the discriminating probe type. On adversarial, Sonnet's terser answers ("3" instead of "Level 3") hurt strict scoring; smart-eval Sonnet ≈ 83% (same as Haiku within noise on n=12).
+3. **Sonnet 4.6 vs Haiku 4.5 inverts under strict eval, narrows under smart eval.** Sonnet hits 97.5% on hierarchy (vs 87.5%) and recovers 67% of `count_probe` (vs 0%) — clear lift on the discriminating probe type. On adversarial, Sonnet's terser answers ("3" instead of "Level 3") hurt strict scoring; smart-eval Sonnet = 67% on n=12 (vs Haiku 83%) — the gap is plausibly an evaluator artifact since Sonnet's bare-number answers don't match canonical "Phase 1"-style gold even under our relaxation.
 4. **Real capability boundary: counting at depth.** Hard variant (count probes only, depths 5–6) drops Haiku 4.5 to **44%** (depth 5: 50%, depth 6: 36%). All other hard variants — needle at subsection depth with high-similarity distractors, 5-hop implicit multihop, comparison/aggregate format probes — were either evaluator-bound or near ceiling.
 5. **Aggregate-probe ground truth is sorted; model output is in document order.** 5 of 7 `format_hard` "misses" are alphabetical-vs-document-order disagreements with identical content. Real format_hard accuracy ≈ 92%, not 72%.
 
@@ -93,7 +93,7 @@ After smart-evaluator re-scoring, Haiku 4.5 gets **10/12 (83%)** on the 12 hand-
 - `ADV_SA_002` (structural ambiguity, hard) — Document has an "Orphan Subsection" between Section B and Section C. Asked which it belongs to, model answered "0" (none) with confident reasoning. Gold answer is "ambiguous — could be 0 or 1". **Failure mode: model commits to a definite answer rather than acknowledging ambiguity.** Both Haiku 4.5 and Sonnet 4.6 exhibit this failure on the same probe.
 - `ADV_FB_001` for Sonnet 4.6 only (format breaking, medium) — heading count in a doc with markdown inside fenced code blocks. Sonnet answered 3, gold is 2.
 
-The remaining 5 strict-eval "misses" all match gold under canonical-answer matching:
+The remaining 6 strict-eval "misses" all match gold under canonical-answer matching:
 - `ADV_SA_001`: model "Phase 1" vs gold "Phase 1 (or arguably document-level/none)"
 - `ADV_SI_002`: model "$1.3M" vs gold "$1.3M (corrected value)"
 - `ADV_SI_003`: model "No\n\n(Exception: Senior contractors with approval...)" vs gold "No (unless senior with approval)"
@@ -109,7 +109,7 @@ These are the durable lessons from this run — they will outlast specific model
 
 ### M1. The default `LiveExperimentHarness.evaluate_response` is too strict for adversarial probes.
 
-Adversarial gold answers carry explanatory tails. Substring containment falsely fails 5/12 = 42% of trials whose responses are correct on the canonical answer. We added `analysis/smart_evaluator.py` which strips:
+Adversarial gold answers carry explanatory tails. Substring containment falsely fails 6/12 = 50% of trials whose responses are correct on the canonical answer. We added `analysis/smart_evaluator.py` which strips:
 - trailing parentheticals (`...(corrected value)`)
 - trailing qualifications (` or `, ` but `, ` unless `, ` except `)
 
@@ -220,7 +220,35 @@ To pinpoint *why* `count_probe` fails, two follow-up sweeps were run via `analys
 
 **This is the cleanest finding in the dataset.** Haiku 4.5 has a sharp capability boundary at depth ≥ 5: when asked "How many sections are at depth level d?" with k=8 leaves at depth d, it returns "1" — likely interpreting the question as a single-spine count rather than a sibling count. Performance recovers (50%) at depth 7, suggesting the failure mode is an inference about question intent more than a depth-counting limit per se.
 
-The original `count_probe` failures at depths 5–6 (44% accuracy on the hard variant) are now explained: **the model is misinterpreting depth-targeted count questions, not failing to enumerate**. Likely fixes: (a) provide an example, (b) phrase the question as "list the headings of all sections under [parent]", (c) pre-tag depths in the prompt.
+### Sonnet 4.6 depth-count curve (same documents, same questions)
+
+| target depth | Sonnet 4.6 acc | Haiku 4.5 acc |
+|--------------|----------------|----------------|
+| 1            | 100%           | 100%          |
+| 2            | 100%           | 100%          |
+| 3            | **100%**       | 75%           |
+| 4            | **100%**       | 75%           |
+| 5            | **100%**       | 0%            |
+| 6            | **100%**       | 0%            |
+| 7            | **100%**       | 50%           |
+
+**Sonnet 4.6 is unaffected.** The depth-5 boundary is purely a Haiku 4.5 limitation. This is consistent with the count_probe-only hard-variant Sonnet result (80% vs Haiku 44% on the same trials).
+
+### Phrasing probe (Haiku 4.5) — confirms intent-misinterpretation
+
+Holding the document fixed and varying *only* the question wording at depths 3–7 (k=8, 4 reps each):
+
+| depth | "depth level d" (original) | "exactly d+1 # characters" | "leaf-level headings" |
+|-------|-----------------------------|------------------------------|------------------------|
+| 3     | 100%                        | 100%                         | 100%                   |
+| 4     | 50%                         | 100%                         | 100%                   |
+| 5     | 25%                         | 100%                         | 100%                   |
+| 6     | **0%**                      | **100%**                     | **100%**               |
+| 7     | 25%                         | 100%                         | 100%                   |
+
+**Haiku 4.5 hits 100% on every depth as soon as the question avoids the word "depth"** and instead refers to the markdown surface form ("# characters") or the document-relative phrase ("leaf-level headings"). Capability is intact; the failure is question-parsing.
+
+The original `count_probe` failures at depths 5–6 are now mechanistically explained: **Haiku 4.5 misinterprets depth-targeted count questions when phrased in abstract structural language ("depth level d"), but performs perfectly when the question references concrete surface features**. Implication for practitioners: phrase document-structure queries in surface terms ("how many headings start with `#####`") rather than in abstract structural terms.
 
 ---
 

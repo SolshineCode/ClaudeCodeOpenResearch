@@ -189,7 +189,7 @@ def _evaluate(trial: LiveTrial, response: str) -> bool:
             no_words = {"no", "false", "incorrect", "n"}
             tokens = set(re.findall(r"[a-z]+", cleaned))
             if e == "yes":
-                return bool(tokens & yes_words) and not bool(tokens & no_words - {"none"})
+                return bool(tokens & yes_words) and not bool(tokens & no_words)
             return bool(tokens & no_words)
         return _word_in(e, cleaned)
 
@@ -382,7 +382,7 @@ def main() -> int:
         roll = {
             "model": args.model,
             "timestamp": datetime.now().isoformat(),
-            "suites": [s["overall"] | {"experiment": s["experiment"]} for s in summaries],
+            "suites": [{**s["overall"], "experiment": s["experiment"]} for s in summaries],
         }
         rollup_path = Path(args.output_dir) / f"rollup_{args.model}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         rollup_path.write_text(json.dumps(roll, indent=2))

@@ -43,7 +43,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed  # noqa: E402
 
 
 def hard_hierarchy_trials(n: int, seed_start: int = 60000) -> List[LiveTrial]:
-    """Deep trees (5-7) and force count_probe (weakest probe type observed)."""
+    """Deep trees (depth 5 or 6) with count_probe only (weakest sub-type)."""
     from document_generator import HierarchicalDocumentGenerator, DocumentRenderer, ProbeGenerator
     rng = random.Random(seed_start)
     trials = []
