@@ -1,0 +1,47 @@
+{
+  "experiment": "multihop_extended",
+  "model": "claude-haiku-4-5",
+  "chain_type": "explicit",
+  "hops": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13
+  ],
+  "reps": 4,
+  "overall_accuracy": 0.9583333333333334,
+  "by_hops": {
+    "3": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "5": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "7": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "9": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "11": {
+      "n": 4,
+      "correct": 3,
+      "accuracy": 0.75
+    },
+    "13": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    }
+  }
+}
