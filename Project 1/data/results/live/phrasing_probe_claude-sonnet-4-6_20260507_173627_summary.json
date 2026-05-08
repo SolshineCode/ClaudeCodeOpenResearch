@@ -1,0 +1,83 @@
+{
+  "experiment": "count_phrasing_probe",
+  "model": "claude-sonnet-4-6",
+  "k": 8,
+  "reps": 4,
+  "table": {
+    "count_leaves|d=3": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "count_leaves|d=4": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "count_leaves|d=5": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "count_leaves|d=6": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "count_leaves|d=7": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "hashes|d=3": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "hashes|d=4": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "hashes|d=5": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "hashes|d=6": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "hashes|d=7": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "level|d=3": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "level|d=4": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "level|d=5": {
+      "n": 4,
+      "correct": 3,
+      "accuracy": 0.75
+    },
+    "level|d=6": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "level|d=7": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    }
+  }
+}

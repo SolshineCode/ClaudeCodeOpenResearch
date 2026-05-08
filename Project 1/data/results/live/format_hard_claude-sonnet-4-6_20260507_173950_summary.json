@@ -1,0 +1,67 @@
+{
+  "experiment": "format_hard",
+  "model": "claude-sonnet-4-6",
+  "timestamp": "2026-05-07T17:39:50.726044",
+  "overall": {
+    "n": 25,
+    "correct": 25,
+    "errors": 0,
+    "accuracy": 1.0,
+    "avg_latency_ms": 1354.4,
+    "total_input_tokens": 19693,
+    "total_output_tokens": 400
+  },
+  "strata": {
+    "format": {
+      "json": {
+        "n": 7,
+        "correct": 7,
+        "accuracy": 1.0
+      },
+      "markdown_prose": {
+        "n": 2,
+        "correct": 2,
+        "accuracy": 1.0
+      },
+      "yaml": {
+        "n": 8,
+        "correct": 8,
+        "accuracy": 1.0
+      },
+      "xml": {
+        "n": 5,
+        "correct": 5,
+        "accuracy": 1.0
+      },
+      "plain_text": {
+        "n": 2,
+        "correct": 2,
+        "accuracy": 1.0
+      },
+      "markdown_table": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      }
+    },
+    "probe_type": {
+      "comparison": {
+        "n": 11,
+        "correct": 11,
+        "accuracy": 1.0
+      },
+      "aggregate": {
+        "n": 14,
+        "correct": 14,
+        "accuracy": 1.0
+      }
+    },
+    "num_entities": {
+      "6": {
+        "n": 25,
+        "correct": 25,
+        "accuracy": 1.0
+      }
+    }
+  }
+}

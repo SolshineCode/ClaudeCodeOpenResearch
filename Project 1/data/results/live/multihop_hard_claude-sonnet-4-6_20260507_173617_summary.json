@@ -1,0 +1,47 @@
+{
+  "experiment": "multihop_hard",
+  "model": "claude-sonnet-4-6",
+  "timestamp": "2026-05-07T17:36:17.787845",
+  "overall": {
+    "n": 25,
+    "correct": 25,
+    "errors": 0,
+    "accuracy": 1.0,
+    "avg_latency_ms": 2283.6,
+    "total_input_tokens": 7829,
+    "total_output_tokens": 2383
+  },
+  "strata": {
+    "num_hops": {
+      "5": {
+        "n": 25,
+        "correct": 25,
+        "accuracy": 1.0
+      }
+    },
+    "chain_type": {
+      "implicit": {
+        "n": 14,
+        "correct": 14,
+        "accuracy": 1.0
+      },
+      "mixed": {
+        "n": 11,
+        "correct": 11,
+        "accuracy": 1.0
+      }
+    },
+    "variant": {
+      "hard_implicit": {
+        "n": 14,
+        "correct": 14,
+        "accuracy": 1.0
+      },
+      "hard_mixed": {
+        "n": 11,
+        "correct": 11,
+        "accuracy": 1.0
+      }
+    }
+  }
+}
