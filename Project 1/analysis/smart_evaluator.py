@@ -56,19 +56,41 @@ def canonical(expected: Any) -> List[str]:
     return [c for c in candidates if c]
 
 
+_WORD_RE = re.compile(r"[A-Za-z0-9_]")
+
+
+def _lex_edge_in(needle: str, haystack: str) -> bool:
+    """Substring with lexical-edge guards. See live_api_runner._word_in
+    for the full rationale; reproduced here so this module stays standalone."""
+    if not needle:
+        return False
+    for m in re.finditer(re.escape(needle), haystack):
+        s, e = m.start(), m.end()
+        if _WORD_RE.match(needle[0]) and s > 0 and _WORD_RE.match(haystack[s - 1]):
+            continue
+        if _WORD_RE.match(needle[-1]) and e < len(haystack) and _WORD_RE.match(haystack[e]):
+            continue
+        return True
+    return False
+
+
 def smart_match(expected: Any, response: str) -> bool:
     if response is None:
         return False
     resp = response.strip().lower()
+    resp_tokens = set(t for t in re.split(r"\W+", resp) if t)
     for variant in canonical(expected):
         v = variant.lower()
         if not v:
             continue
-        if v in resp:
+        # Phrase-level: lexical-edge search for the whole canonical phrase
+        if _lex_edge_in(v, resp):
             return True
-        # token-level match: every word in canonical answer appears
+        # Bag-of-words fallback: every token in canonical phrase appears as
+        # an exact token in the response. Matches reorderings (e.g.
+        # "Section 1" vs "1, Section") without admitting "1" inside "10".
         toks = [t for t in re.split(r"\W+", v) if t]
-        if toks and all(t in resp for t in toks):
+        if toks and all(t in resp_tokens for t in toks):
             return True
     return False
 

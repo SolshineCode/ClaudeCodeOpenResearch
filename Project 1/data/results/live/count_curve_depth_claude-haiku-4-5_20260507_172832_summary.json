@@ -1,0 +1,85 @@
+{
+  "experiment": "counting_curve_depth",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:28:32.042906",
+  "sweep_axis": "target_depth",
+  "sweep_values": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "reps": 4,
+  "overall_accuracy": 0.5714285714285714,
+  "by_target_depth": {
+    "1": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "2": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "3": {
+      "n": 4,
+      "correct": 3,
+      "accuracy": 0.75,
+      "mean_signed_error": -8.0,
+      "errors": [
+        -8
+      ]
+    },
+    "4": {
+      "n": 4,
+      "correct": 3,
+      "accuracy": 0.75,
+      "mean_signed_error": -7.0,
+      "errors": [
+        -7
+      ]
+    },
+    "5": {
+      "n": 4,
+      "correct": 0,
+      "accuracy": 0.0,
+      "mean_signed_error": -7.0,
+      "errors": [
+        -7,
+        -7,
+        -7,
+        -7
+      ]
+    },
+    "6": {
+      "n": 4,
+      "correct": 0,
+      "accuracy": 0.0,
+      "mean_signed_error": -7.0,
+      "errors": [
+        -7,
+        -7,
+        -7,
+        -7
+      ]
+    },
+    "7": {
+      "n": 4,
+      "correct": 2,
+      "accuracy": 0.5,
+      "mean_signed_error": -7.0,
+      "errors": [
+        -7,
+        -7
+      ]
+    }
+  }
+}

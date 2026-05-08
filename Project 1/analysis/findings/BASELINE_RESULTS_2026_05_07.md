@@ -189,11 +189,48 @@ python analysis/smart_evaluator.py data/results/live/adversarial_*.jsonl --write
 
 `ANTHROPIC_API_KEY` must be set in env. With Haiku 4.5 the full baseline run is ~3 minutes wall time and ~165k input + 4.5k output tokens.
 
+## Counting Dose-Response Curves (added 2026-05-07)
+
+To pinpoint *why* `count_probe` fails, two follow-up sweeps were run via `analysis/counting_curve.py`. Both use single-spine documents (one chain of intermediate headings, with the target counts at one specific depth) so the only varying factor is the named axis.
+
+### Magnitude curve at fixed depth = 1
+
+| k (sibling sections) | n | accuracy |
+|----------------------|---|----------|
+| 3                    | 4 | 100%     |
+| 5                    | 4 | 100%     |
+| 10                   | 4 | 100%     |
+| 20                   | 4 | 100%     |
+| 40                   | 4 | 100%     |
+| 80                   | 4 | 100%     |
+
+**H1.4 (Weber's-law magnitude effect) is firmly NOT supported.** Haiku 4.5 counts 80 sibling sections at depth 1 perfectly. Magnitude alone does not explain the count-probe failures.
+
+### Depth curve at fixed k = 8
+
+| target depth | n | accuracy | typical wrong answer |
+|--------------|---|----------|----------------------|
+| 1            | 4 | 100%     | —                    |
+| 2            | 4 | 100%     | —                    |
+| 3            | 4 | 75%      | "1"                  |
+| 4            | 4 | 75%      | "1"                  |
+| 5            | 4 | **0%**   | "1"                  |
+| 6            | 4 | **0%**   | "1"                  |
+| 7            | 4 | 50%      | "1"                  |
+
+**This is the cleanest finding in the dataset.** Haiku 4.5 has a sharp capability boundary at depth ≥ 5: when asked "How many sections are at depth level d?" with k=8 leaves at depth d, it returns "1" — likely interpreting the question as a single-spine count rather than a sibling count. Performance recovers (50%) at depth 7, suggesting the failure mode is an inference about question intent more than a depth-counting limit per se.
+
+The original `count_probe` failures at depths 5–6 (44% accuracy on the hard variant) are now explained: **the model is misinterpreting depth-targeted count questions, not failing to enumerate**. Likely fixes: (a) provide an example, (b) phrase the question as "list the headings of all sections under [parent]", (c) pre-tag depths in the prompt.
+
+---
+
 ## Open Questions for the Next Run
 
-1. **Counting curve.** Vary count magnitude (5, 10, 25, 100, 250) at fixed depth to test Weber's-law H1.4. The 0/3 → 11/25 trend is suggestive but the data isn't there.
-2. **Needle depth boundary.** Sweep `needle_depth ∈ {0, 1, 2, 3, 4}` at fixed format and distractor config.
-3. **Format ranking on harder probes.** Build a relationship probe and an aggregate probe with order-insensitive evaluation, then rank all 6 formats.
-4. **Multi-hop generator extension.** Increase entity pool to support 8–10 hops; test where multi-hop actually breaks.
-5. **Sonnet hard-variant comparison.** Run `harder_variants` on Sonnet 4.6 to see whether the count-probe boundary moves or just shifts.
-6. **Self-consistency.** Run each trial 3× and measure variance; current single-shot scores conflate accuracy with sampling noise.
+1. ~~**Counting curve.** Vary count magnitude at fixed depth to test Weber's-law H1.4.~~ **DONE** — H1.4 not supported. Cleanly negative.
+2. ~~**Depth-counting boundary.**~~ **DONE** — sharp boundary at depth ≥ 5 with a specific failure mode (returns "1").
+3. **Needle depth boundary.** Sweep `needle_depth ∈ {0, 1, 2, 3, 4}` at fixed format and distractor config.
+4. **Format ranking on harder probes.** Build a relationship probe and an aggregate probe with order-insensitive evaluation, then rank all 6 formats.
+5. **Multi-hop generator extension.** Increase entity pool to support 8–10 hops; test where multi-hop actually breaks.
+6. **Sonnet hard-variant comparison.** ~~Run `harder_variants` on Sonnet 4.6.~~ **DONE for hierarchy_hard** — Sonnet 4.6 = 80% on hard count probes (vs Haiku 44%); same shape, shifted up. Other hard variants pending.
+7. **Disambiguating depth-count intent.** Re-run depth-count curve with rephrased prompts ("count the sub-sections of [parent X]") to test the interpretation hypothesis.
+8. **Self-consistency.** Run each trial 3× and measure variance; current single-shot scores conflate accuracy with sampling noise.

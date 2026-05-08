@@ -70,19 +70,19 @@ def _build_client():
     import anthropic
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        for candidate in [
-            Path.home() / "ChatFiller" / "voice" / "env.txt",
-            Path("C:/Users/caleb/ChatFiller/voice/env.txt"),
-        ]:
-            if candidate.exists():
-                for line in candidate.read_text().splitlines():
-                    if line.startswith("ANTHROPIC_API_KEY"):
-                        api_key = line.split("=", 1)[1].strip().strip('"').strip("'")
-                        break
-                if api_key:
+        # Optional fallback: load a .env file in the project root if present.
+        env_file = PROJECT_ROOT / ".env"
+        if env_file.exists():
+            for line in env_file.read_text().splitlines():
+                line = line.strip()
+                if line.startswith("ANTHROPIC_API_KEY"):
+                    api_key = line.split("=", 1)[1].strip().strip('"').strip("'")
                     break
     if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not found")
+        raise RuntimeError(
+            "ANTHROPIC_API_KEY not found. Set it in the environment or in "
+            f"{PROJECT_ROOT / '.env'} as ANTHROPIC_API_KEY=sk-ant-..."
+        )
     return anthropic.Anthropic(api_key=api_key)
 
 
@@ -124,13 +124,54 @@ def _run_one(client, trial: LiveTrial, model: str, max_tokens: int) -> APIResult
         )
 
 
+_WORD_RE = re.compile(r"[A-Za-z0-9_]")
+
+
+def _word_in(needle: str, haystack: str) -> bool:
+    """Substring match with lexical-edge guards.
+
+    Plain ``re.escape(needle)`` wrapped in ``\\b`` would block matches like
+    ``$82,000`` (because ``$`` is non-word and ``\\b`` only fires at a
+    word/non-word transition). Instead, we check that the position *before*
+    the match is not a word char extending the leftmost word char of the
+    needle, and likewise for the position *after*.
+
+    Examples:
+      _word_in("1",        "answer is 10")      -> False
+      _word_in("1",        "answer is 1")       -> True
+      _word_in("$82,000",  "received $82,000")  -> True
+      _word_in("node_1",   "node_10 here")      -> False
+    """
+    if not needle:
+        return False
+    pat = re.escape(needle)
+    for m in re.finditer(pat, haystack):
+        s, e = m.start(), m.end()
+        # left guard: the previous char must not extend the leftmost char if
+        # that leftmost char is itself a word char
+        if needle[0:1] and _WORD_RE.match(needle[0]):
+            if s > 0 and _WORD_RE.match(haystack[s - 1]):
+                continue
+        # right guard: same for the rightmost char
+        if needle[-1:] and _WORD_RE.match(needle[-1]):
+            if e < len(haystack) and _WORD_RE.match(haystack[e]):
+                continue
+        return True
+    return False
+
+
 def _evaluate(trial: LiveTrial, response: str) -> bool:
-    """Reproduce LiveExperimentHarness.evaluate_response with a few extras."""
+    """Word-boundary match on (lowercased) ground-truth answer.
+
+    Substring containment was the original implementation but causes false
+    positives for short identifiers (e.g. id ``node_1`` in response containing
+    ``node_10``) and short numeric answers (``1`` vs ``10``).
+    """
     cleaned = response.strip().lower()
     expected = trial.expected_answer
 
     if isinstance(expected, bool):
-        return ("yes" in cleaned and expected) or ("no" in cleaned and not expected)
+        return _word_in("yes", cleaned) if expected else _word_in("no", cleaned)
 
     if isinstance(expected, int):
         nums = re.findall(r"-?\d+", cleaned)
@@ -139,19 +180,20 @@ def _evaluate(trial: LiveTrial, response: str) -> bool:
     if isinstance(expected, list):
         if not expected:
             return cleaned in {"none", "no siblings", "[]", ""}
-        return all(str(item).lower() in cleaned for item in expected)
+        return all(_word_in(str(item).lower(), cleaned) for item in expected)
 
     if isinstance(expected, str):
-        if expected.lower() in {"yes", "no"}:
+        e = expected.lower()
+        if e in {"yes", "no"}:
             yes_words = {"yes", "true", "correct", "y"}
             no_words = {"no", "false", "incorrect", "n"}
             tokens = set(re.findall(r"[a-z]+", cleaned))
-            if expected.lower() == "yes":
+            if e == "yes":
                 return bool(tokens & yes_words) and not bool(tokens & no_words - {"none"})
             return bool(tokens & no_words)
-        return expected.lower() in cleaned
+        return _word_in(e, cleaned)
 
-    return str(expected).lower() in cleaned
+    return _word_in(str(expected).lower(), cleaned)
 
 
 def build_hierarchy_trials(n: int, seed_start: int = 20000) -> List[LiveTrial]:

@@ -3,12 +3,17 @@ Harder Variants — push the experiment difficulty past where Haiku 4.5
 saturates. Default suites mostly hit the ceiling on Haiku, masking real
 capability boundaries. These variants:
 
-  - Hierarchy: deeper trees (depths 5-7) + count probes only (the weakest
-    sub-type observed in baseline)
-  - Needle: needle placed at depth 1 (subsection), high-similarity
-    distractors only
-  - Multihop: 6-7 hops with implicit chains
+  - Hierarchy: deeper trees (depths 5-6) with count probes only — the
+    weakest sub-type observed in baseline.
+  - Needle: needle placed at depth 1 (subsection) with 3 high-similarity
+    distractors at multiple depths.
+  - Multihop: 5-hop chains using implicit / mixed link styles. The
+    underlying generator silently caps at len(domain['entities'])
+    distinct entity types (5 in the default domain), so 6+ hops produce
+    broken trials; we run 5 to stay within that cap and lift difficulty
+    via the link-style choice instead.
   - Format: comparison + aggregate probes only (entity_property too easy)
+    over 6 entities (vs default 4).
 
 Writes results in the same shape as live_api_runner so the analysis
 pipeline can ingest them.
