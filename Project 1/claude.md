@@ -123,9 +123,11 @@ report = generate_analysis_report(results, 'experiment_name', ['depth', 'format'
 - [x] Four experiment protocols designed and implemented
 - [x] Document generation tools built
 - [x] Analysis framework created
-- [ ] Baseline experiments to run
-- [ ] Results analysis
+- [x] Baseline experiments run (Haiku 4.5 + partial Sonnet 4.6, 2026-05-07 — see `analysis/findings/BASELINE_RESULTS_2026_05_07.md`)
+- [x] First-pass results analysis (smart-evaluator + hard variants)
 - [ ] Cross-experiment synthesis
+- [ ] Counting-magnitude curve (H1.4 dose-response)
+- [ ] Sonnet hard-variant runs
 
 ---
 

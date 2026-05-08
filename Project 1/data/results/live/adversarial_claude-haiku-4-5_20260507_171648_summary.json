@@ -1,0 +1,184 @@
+{
+  "experiment": "adversarial",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:16:48.042736",
+  "overall": {
+    "n": 12,
+    "correct": 3,
+    "errors": 0,
+    "accuracy": 0.25,
+    "avg_latency_ms": 1018.6,
+    "total_input_tokens": 2308,
+    "total_output_tokens": 296
+  },
+  "strata": {
+    "category": {
+      "structural_ambiguity": {
+        "n": 3,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "semantic_interference": {
+        "n": 3,
+        "correct": 1,
+        "accuracy": 0.3333333333333333
+      },
+      "positional_bias": {
+        "n": 2,
+        "correct": 2,
+        "accuracy": 1.0
+      },
+      "format_breaking": {
+        "n": 2,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "reasoning_trap": {
+        "n": 2,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    },
+    "difficulty": {
+      "medium": {
+        "n": 6,
+        "correct": 1,
+        "accuracy": 0.16666666666666666
+      },
+      "hard": {
+        "n": 5,
+        "correct": 1,
+        "accuracy": 0.2
+      },
+      "easy": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      }
+    },
+    "target_weakness": {
+      "Tendency to associate content with following rather than preceding section": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Assuming well-formed hierarchy when structure is ambiguous": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Conflating visual position with explicit depth markers": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Stopping at first match without checking qualifiers": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "Using first-encountered value instead of tracking updates": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Missing negations when similar positive statements exist": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Over-weighting information that appears multiple times early": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "Over-weighting recent/last information regardless of authority": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "Parsing structure inside code blocks": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Tracking corrections within quoted speech": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Order of operations in multi-step calculations": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Tracking exception priority and overrides": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    },
+    "trap_answer": {
+      "Phase 2": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "1": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Level 2": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "$95,000 (Engineering John Smith)": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "$1.2M (original value)": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Yes": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "8080": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "April": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "4 (including the ones in the code block)": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Q2 (her initial statement)": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "$7.50 (incorrectly applying discount to base then doubling)": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "Yes (CEO is C-level)": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    }
+  }
+}

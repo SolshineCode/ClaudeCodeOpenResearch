@@ -1,0 +1,47 @@
+{
+  "experiment": "multihop_hard",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:21:36.124467",
+  "overall": {
+    "n": 25,
+    "correct": 24,
+    "errors": 0,
+    "accuracy": 0.96,
+    "avg_latency_ms": 982.7,
+    "total_input_tokens": 7829,
+    "total_output_tokens": 1108
+  },
+  "strata": {
+    "num_hops": {
+      "5": {
+        "n": 25,
+        "correct": 24,
+        "accuracy": 0.96
+      }
+    },
+    "chain_type": {
+      "implicit": {
+        "n": 14,
+        "correct": 13,
+        "accuracy": 0.9285714285714286
+      },
+      "mixed": {
+        "n": 11,
+        "correct": 11,
+        "accuracy": 1.0
+      }
+    },
+    "variant": {
+      "hard_implicit": {
+        "n": 14,
+        "correct": 13,
+        "accuracy": 0.9285714285714286
+      },
+      "hard_mixed": {
+        "n": 11,
+        "correct": 11,
+        "accuracy": 1.0
+      }
+    }
+  }
+}

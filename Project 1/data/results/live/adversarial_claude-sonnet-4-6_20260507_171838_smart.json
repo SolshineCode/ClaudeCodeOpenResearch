@@ -1,0 +1,87 @@
+{
+  "file": "adversarial_claude-sonnet-4-6_20260507_171838.jsonl",
+  "n": 12,
+  "original_accuracy": 0.25,
+  "smart_accuracy": 0.6666666666666666,
+  "flips": [
+    {
+      "trial_id": "ADV_SI_002",
+      "expected": "$1.3M (corrected value)",
+      "actual_preview": "$1.3M",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_SI_003",
+      "expected": "No (unless senior with approval)",
+      "actual_preview": "no",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_FB_002",
+      "expected": "Q3 (her corrected statement)",
+      "actual_preview": "Q3",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_RT_001",
+      "expected": "$14.99 (base $9.99 \u00d7 2 = $19.98, then 25% off = $14.985)",
+      "actual_preview": "For a $120 international order:\n- Base rate: $9.99 (order over $100)\n- Express international: 2x base rate = $9.99 \u00d7 2 =",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_RT_002",
+      "expected": "No (time-based override supersedes C-level exception)",
+      "actual_preview": "No",
+      "original": false,
+      "smart": true
+    }
+  ],
+  "by_difficulty": {
+    "medium": {
+      "n": 6,
+      "orig": 1,
+      "smart": 3
+    },
+    "hard": {
+      "n": 5,
+      "orig": 1,
+      "smart": 4
+    },
+    "easy": {
+      "n": 1,
+      "orig": 1,
+      "smart": 1
+    }
+  },
+  "by_category": {
+    "structural_ambiguity": {
+      "n": 3,
+      "orig": 0,
+      "smart": 0
+    },
+    "semantic_interference": {
+      "n": 3,
+      "orig": 1,
+      "smart": 3
+    },
+    "positional_bias": {
+      "n": 2,
+      "orig": 2,
+      "smart": 2
+    },
+    "format_breaking": {
+      "n": 2,
+      "orig": 0,
+      "smart": 1
+    },
+    "reasoning_trap": {
+      "n": 2,
+      "orig": 0,
+      "smart": 2
+    }
+  }
+}

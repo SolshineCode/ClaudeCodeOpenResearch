@@ -1,0 +1,59 @@
+{
+  "experiment": "counting_curve",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:27:08.605835",
+  "magnitudes": [
+    3,
+    5,
+    10,
+    20,
+    40,
+    80
+  ],
+  "reps": 4,
+  "overall_accuracy": 1.0,
+  "by_magnitude": {
+    "3": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "5": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "10": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "20": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "40": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    },
+    "80": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "mean_signed_error": null,
+      "errors": []
+    }
+  }
+}

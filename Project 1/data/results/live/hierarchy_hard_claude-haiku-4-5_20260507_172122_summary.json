@@ -1,0 +1,159 @@
+{
+  "experiment": "hierarchy_hard",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:21:22.289361",
+  "overall": {
+    "n": 25,
+    "correct": 11,
+    "errors": 0,
+    "accuracy": 0.44,
+    "avg_latency_ms": 907.6,
+    "total_input_tokens": 19807,
+    "total_output_tokens": 632
+  },
+  "strata": {
+    "depth": {
+      "6": {
+        "n": 11,
+        "correct": 4,
+        "accuracy": 0.36363636363636365
+      },
+      "5": {
+        "n": 14,
+        "correct": 7,
+        "accuracy": 0.5
+      }
+    },
+    "probe_type": {
+      "count_probe": {
+        "n": 25,
+        "correct": 11,
+        "accuracy": 0.44
+      }
+    },
+    "variant": {
+      "hard_count": {
+        "n": 25,
+        "correct": 11,
+        "accuracy": 0.44
+      }
+    },
+    "total_nodes": {
+      "55": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "29": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "20": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "35": {
+        "n": 2,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "24": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "34": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "49": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "25": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "51": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "15": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "48": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "7": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "33": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "30": {
+        "n": 2,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "28": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "18": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "10": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "12": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "36": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "42": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "17": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "37": {
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      "16": {
+        "n": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    }
+  }
+}

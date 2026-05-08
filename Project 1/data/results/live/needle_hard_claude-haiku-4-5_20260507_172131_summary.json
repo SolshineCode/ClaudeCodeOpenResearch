@@ -1,0 +1,54 @@
+{
+  "experiment": "needle_hard",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:21:31.274557",
+  "overall": {
+    "n": 25,
+    "correct": 25,
+    "errors": 0,
+    "accuracy": 1.0,
+    "avg_latency_ms": 1958.2,
+    "total_input_tokens": 41084,
+    "total_output_tokens": 3061
+  },
+  "strata": {
+    "similarity": {
+      "high": {
+        "n": 25,
+        "correct": 25,
+        "accuracy": 1.0
+      }
+    },
+    "needle_depth": {
+      "1": {
+        "n": 25,
+        "correct": 25,
+        "accuracy": 1.0
+      }
+    },
+    "num_distractors": {
+      "3": {
+        "n": 25,
+        "correct": 25,
+        "accuracy": 1.0
+      }
+    },
+    "local_position": {
+      "start": {
+        "n": 12,
+        "correct": 12,
+        "accuracy": 1.0
+      },
+      "end": {
+        "n": 10,
+        "correct": 10,
+        "accuracy": 1.0
+      },
+      "middle": {
+        "n": 3,
+        "correct": 3,
+        "accuracy": 1.0
+      }
+    }
+  }
+}

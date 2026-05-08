@@ -1,0 +1,62 @@
+{
+  "experiment": "format",
+  "model": "claude-haiku-4-5",
+  "timestamp": "2026-05-07T17:16:01.394174",
+  "overall": {
+    "n": 40,
+    "correct": 40,
+    "errors": 0,
+    "accuracy": 1.0,
+    "avg_latency_ms": 673.4,
+    "total_input_tokens": 21952,
+    "total_output_tokens": 252
+  },
+  "strata": {
+    "format": {
+      "plain_text": {
+        "n": 9,
+        "correct": 9,
+        "accuracy": 1.0
+      },
+      "xml": {
+        "n": 11,
+        "correct": 11,
+        "accuracy": 1.0
+      },
+      "markdown_table": {
+        "n": 6,
+        "correct": 6,
+        "accuracy": 1.0
+      },
+      "json": {
+        "n": 5,
+        "correct": 5,
+        "accuracy": 1.0
+      },
+      "markdown_prose": {
+        "n": 6,
+        "correct": 6,
+        "accuracy": 1.0
+      },
+      "yaml": {
+        "n": 3,
+        "correct": 3,
+        "accuracy": 1.0
+      }
+    },
+    "probe_type": {
+      "entity_property": {
+        "n": 40,
+        "correct": 40,
+        "accuracy": 1.0
+      }
+    },
+    "num_entities": {
+      "4": {
+        "n": 40,
+        "correct": 40,
+        "accuracy": 1.0
+      }
+    }
+  }
+}
