@@ -28,7 +28,7 @@ def collect() -> Dict[Tuple[str, str], Dict]:
     by_key: Dict[Tuple[str, str], Dict] = {}
     for path in sorted(RESULTS_DIR.glob("*_summary.json")):
         try:
-            d = json.loads(path.read_text())
+            d = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             continue
         # Skip smart-evaluator re-scoring files (they have a different shape)
@@ -66,9 +66,15 @@ def render_markdown(table: Dict[Tuple[str, str], Dict], suites_filter: List[str]
     out.append("|" + "---|" * (2 + len(models)))
     for s in suites:
         cells = []
-        # Use the n from any model that ran this suite
-        ns = [table[(s, m)]['overall']['n'] for m in models if (s, m) in table]
-        n_str = str(ns[0]) if ns else "—"
+        # Show ns as a unique-set so cross-model trial-count differences
+        # surface in the table instead of being silently hidden by ns[0].
+        ns = sorted({table[(s, m)]['overall']['n'] for m in models if (s, m) in table})
+        if not ns:
+            n_str = "—"
+        elif len(ns) == 1:
+            n_str = str(ns[0])
+        else:
+            n_str = "/".join(str(n) for n in ns)  # e.g. "25/40" if mismatch
         cells.append(s)
         cells.append(n_str)
         for m in models:
@@ -120,12 +126,16 @@ def main():
                         help='write to analysis/findings/RESULTS_TABLE.md')
     args = parser.parse_args()
     table = collect()
-    suites_filter = args.filter.split(',') if args.filter else None
+    suites_filter = (
+        [s.strip() for s in args.filter.split(',') if s.strip()]
+        if args.filter
+        else None
+    )
     md = render_markdown(table, suites_filter)
     print(md)
     if args.write:
         out = FINDINGS_DIR / "RESULTS_TABLE.md"
-        out.write_text(md)
+        out.write_text(md, encoding="utf-8")
         print(f"\nwrote {out}", file=sys.stderr)
 
 
