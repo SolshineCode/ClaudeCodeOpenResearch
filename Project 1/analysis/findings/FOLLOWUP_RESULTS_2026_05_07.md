@@ -70,9 +70,19 @@ Combining baseline + follow-up findings, three concrete recommendations:
 
 3. **For adversarial probes with qualified gold answers, use canonical-answer extraction.** `analysis/smart_evaluator.py` recovers most of the gap; folding it into the canonical evaluator is the simplest fix. For terser models (Sonnet), even canonical matching can fail when the model gives a bare number ("3") for a gold answer like "Level 3" — consider also extracting a canonical short-form from the response.
 
+## Aggregate-Probe Fix (added inline this PR)
+
+`IsomorphicProbeGenerator.aggregate_probe` previously returned a comma-joined alphabetically-sorted string. Changed to return a list when the source value is list-typed; the evaluator's existing list branch performs order-insensitive set-membership matching. Re-running `format_hard` after the fix:
+
+| Model         | Before fix | After fix |
+|---------------|-----------|-----------|
+| Haiku 4.5     | 72%       | **88%**   |
+| Sonnet 4.6    | 92%       | **100%**  |
+
+The +16 / +8 percentage-point lift is entirely from removing the alphabetical-sort artifact — same documents, same model responses, just an honest evaluator. The remaining 3 Haiku misses are real `comparison_probe` errors (not aggregate-order artifacts).
+
 ## Open Items After This Round
 
 - **Multi-hop generator extension** to support 6–10 hops (currently capped silently at 5 by entity-pool size).
-- **Format hard-variant evaluator fix.** Aggregate probes should compare as sets, not strings.
 - **More-granular depth sweep on Sonnet 4.6.** Does the depth-5 dip (3/4) with "depth level d" reflect a real residual sensitivity, or sampling noise? Needs n≥20 at d=5.
 - **Self-consistency.** Run the depth-5 "depth level d" Haiku trial 10× with seed=fixed; is the failure stochastic or deterministic?

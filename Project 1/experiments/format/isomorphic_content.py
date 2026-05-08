@@ -300,11 +300,26 @@ class IsomorphicProbeGenerator:
 
     @staticmethod
     def aggregate_probe(content: SemanticContent) -> Dict:
-        """Ask about aggregate facts."""
+        """Ask about aggregate facts.
+
+        For list-valued facts the answer is returned as a list rather than
+        a comma-joined string. This lets the evaluator perform an
+        order-insensitive set-membership check via the existing list-handling
+        branch (every item must appear in the response, in any order).
+        Live-API runs on 2026-05-07 showed that 5/7 hard-variant
+        format misses were *correct content in document order vs gold
+        in alphabetical order* — a probe-design problem, not a model
+        failure.
+        """
         fact = random.choice(content.facts)
         value = fact['value']
         if isinstance(value, list):
-            value = ', '.join(sorted(value))
+            return {
+                'type': 'aggregate',
+                'question': f"What is the {fact['key'].replace('_', ' ')}?",
+                'answer': list(value),  # list -> evaluator does order-insensitive match
+                'fact_key': fact['key']
+            }
 
         return {
             'type': 'aggregate',
