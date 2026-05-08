@@ -31,77 +31,59 @@ We employ a "games" metaphor because each experiment:
 
 ### Experiment 1: Hierarchy Perception
 
-**Status**: Protocol complete, stimuli ready
+**Status**: Live-tested (Haiku 4.5 + Sonnet 4.6, 2026-05-07). See [BASELINE_RESULTS_2026_05_07.md](BASELINE_RESULTS_2026_05_07.md).
 
-**Core Questions**:
-- Can models count nesting depth accurately?
-- How do parent-child vs sibling relationships differ in recognizability?
-- Does counting accuracy follow Weber's law (proportional difficulty)?
+**Headline**: Haiku 4.5 = 87.5% (40 trials, depths 1–4); Sonnet 4.6 = 97.5%. Hard variant (count probes only at depths 5–6) drops Haiku to **44%**.
 
 **Hypotheses**:
-| ID | Hypothesis | Status |
-|----|------------|--------|
-| H1.1 | Depth perception accuracy decreases with depth | Untested |
-| H1.2 | JSON format yields highest structural accuracy | Untested |
-| H1.3 | Parent relationships easier than sibling relationships | Untested |
-| H1.4 | Counting follows Weber's law (difficulty ∝ magnitude) | Untested |
+| ID | Hypothesis | Status | Verdict |
+|----|------------|--------|---------|
+| H1.1 | Depth perception accuracy decreases with depth | Live-tested | **Partially supported** — sharp threshold at depth 5+, not smooth degradation |
+| H1.2 | JSON format yields highest structural accuracy | Untested | Ceiling effect masks any difference; need harder probes |
+| H1.3 | Parent relationships easier than sibling relationships | Live-tested | **Not supported** — both ~100%; salient axis is *probe type* (count_probe is the weakness) |
+| H1.4 | Counting follows Weber's law | Live-tested | **No evidence yet** — needs a count-magnitude sweep at fixed depth |
 
 ---
 
 ### Experiment 2: Needle in Structure
 
-**Status**: Protocol complete, stimuli ready
-
-**Core Questions**:
-- Do structural markers (headers) act as attention anchors?
-- How do high-similarity distractors affect retrieval?
-- Is there a depth penalty for nested information?
+**Status**: Live-tested. Haiku 4.5 = 100% on baseline (40 trials) and on hard variant (depth-1 placement, 3× high-similarity distractors, 25 trials). See [BASELINE_RESULTS_2026_05_07.md](BASELINE_RESULTS_2026_05_07.md).
 
 **Hypotheses**:
-| ID | Hypothesis | Status |
-|----|------------|--------|
-| H2.1 | Information after headers is easier to retrieve | Untested |
-| H2.2 | High-similarity distractors cause confusion errors | Untested |
-| H2.3 | Deeper nesting reduces retrieval accuracy | Untested |
-| H2.4 | Explicit structure (XML) aids retrieval | Untested |
+| ID | Hypothesis | Status | Verdict |
+|----|------------|--------|---------|
+| H2.1 | Information after headers is easier to retrieve | **Cannot test as designed** — `LiveExperimentHarness.generate_needle_trial` pins needle to depth 0 / middle |
+| H2.2 | High-similarity distractors cause confusion errors | Live-tested | **Not supported at this scale** — 100% even with 3× high-sim distractors |
+| H2.3 | Deeper nesting reduces retrieval accuracy | Live-tested | **Not supported through depth 1** — need depth 3+ |
+| H2.4 | Explicit structure (XML) aids retrieval | Untested | Ceiling effect would mask anyway |
 
 ---
 
 ### Experiment 3: Isomorphic Content Analysis
 
-**Status**: Protocol complete, stimuli ready
-
-**Core Questions**:
-- Is document understanding truly format-independent?
-- What format-specific affordances exist?
-- How do different question types interact with format?
+**Status**: Live-tested. Haiku 4.5 = 100% on baseline `entity_property` (40 trials, all 6 formats); 72% on hard variant — but **5 of 7 misses are evaluator artifacts** (model returns aggregate items in document order, ground truth is sorted alphabetically). See [BASELINE_RESULTS_2026_05_07.md](BASELINE_RESULTS_2026_05_07.md).
 
 **Hypotheses**:
-| ID | Hypothesis | Status |
-|----|------------|--------|
-| H3.1 | Property lookups favor structured formats (JSON, XML) | Untested |
-| H3.2 | Tabular formats excel at comparison tasks | Untested |
-| H3.3 | Aggregate questions are format-invariant | Untested |
-| H3.4 | Prose formats better for relationship questions | Untested |
+| ID | Hypothesis | Status | Verdict |
+|----|------------|--------|---------|
+| H3.1 | Property lookups favor structured formats | Live-tested | **Cannot reject** — all 6 formats at 100% on entity_property; ceiling masks effect |
+| H3.2 | Tabular formats excel at comparison | Live-tested | Inconclusive (n=4 comparison probes, 2 misses across yaml/json) |
+| H3.3 | Aggregate questions are format-invariant | Live-tested | **Confounded** — aggregate ground truth is sorted, model output is in document order; needs order-insensitive scoring |
+| H3.4 | Prose formats better for relationship questions | Untested | No relationship probe in current set |
 
 ---
 
 ### Experiment 4: Multi-Hop Document Reasoning
 
-**Status**: Protocol complete, stimuli ready
-
-**Core Questions**:
-- How does reasoning scale with chain length?
-- Do explicit cross-references help?
-- What are the failure modes in multi-hop reasoning?
+**Status**: Live-tested. Haiku 4.5 = 100% on baseline (40 trials, 2–5 hops, explicit chains) and 96% on hard variant (5 hops, implicit/mixed). The single failure had correct chain reasoning but wrong final-property pick. See [BASELINE_RESULTS_2026_05_07.md](BASELINE_RESULTS_2026_05_07.md).
 
 **Hypotheses**:
-| ID | Hypothesis | Status |
-|----|------------|--------|
-| H4.1 | Accuracy decreases linearly (or worse) with hops | Untested |
-| H4.2 | Explicit links yield higher accuracy | Untested |
-| H4.3 | Most errors occur at early hops (chain breaks) | Untested |
-| H4.4 | Structured format markers improve multi-hop | Untested |
+| ID | Hypothesis | Status | Verdict |
+|----|------------|--------|---------|
+| H4.1 | Accuracy decreases linearly (or worse) with hops | Live-tested | **Not supported through 5 hops** — generator currently caps at 5 (entity-pool size); test the boundary by extending the generator |
+| H4.2 | Explicit links yield higher accuracy than implicit | Live-tested | Within noise on n=25; needs head-to-head at fixed hop count |
+| H4.3 | Most errors occur at early hops | Untestable | Single error in entire dataset |
+| H4.4 | Structured format markers improve multi-hop | Untested | Only markdown used |
 
 ---
 
@@ -118,6 +100,24 @@ We employ a "games" metaphor because each experiment:
 
 **Key Insights from Probe Design**:
 Each probe targets a specific failure mode with a known "trap answer" that reveals the weakness. This allows for diagnostic error analysis beyond simple accuracy.
+
+---
+
+## Live API Baseline (2026-05-07)
+
+The first end-to-end run against actual model APIs is documented in **[BASELINE_RESULTS_2026_05_07.md](BASELINE_RESULTS_2026_05_07.md)**. Major takeaways supersede the synthetic-mock projections in the "Emergent Insights" section below:
+
+| Suite        | Haiku 4.5 strict | Haiku 4.5 smart | Sonnet 4.6 strict | Hard-variant Haiku 4.5 |
+|--------------|------------------|-----------------|-------------------|------------------------|
+| hierarchy    | 87.5%            | —               | 97.5%             | 44% (count, depth 5–6) |
+| needle       | 100%             | —               | —                 | 100% (depth-1, 3× hi-sim) |
+| format       | 100%             | —               | —                 | ~92% (real, ord-insens.) |
+| multihop     | 100%             | —               | —                 | 96% (5h implicit/mixed) |
+| adversarial  | 25%              | **83%**         | 25% (smart 67%)   | — |
+
+The most important methodological finding: **the strict substring evaluator falsely fails 5/12 correct adversarial responses** because gold answers carry parenthetical qualifications. `analysis/smart_evaluator.py` adds canonical-answer extraction and recovers them. Several "ceiling effects" in the original framework were also evaluator-bound; see Sections M3–M5 of the baseline report.
+
+The capability map below was derived from synthetic mocks before any live data existed and is no longer current. The live-data version lives in BASELINE_RESULTS_2026_05_07.md.
 
 ---
 

@@ -1,0 +1,101 @@
+{
+  "file": "adversarial_claude-haiku-4-5_20260507_171648.jsonl",
+  "n": 12,
+  "original_accuracy": 0.25,
+  "smart_accuracy": 0.8333333333333334,
+  "flips": [
+    {
+      "trial_id": "ADV_SA_001",
+      "expected": "Phase 1 (or arguably document-level/none)",
+      "actual_preview": "Phase 1",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_SI_002",
+      "expected": "$1.3M (corrected value)",
+      "actual_preview": "$1.3M",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_SI_003",
+      "expected": "No (unless senior with approval)",
+      "actual_preview": "No\n\n(Exception: Senior contractors with approval can access the main database)",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_FB_001",
+      "expected": "2 (Usage Example and Real Configuration)",
+      "actual_preview": "2",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_FB_002",
+      "expected": "Q3 (her corrected statement)",
+      "actual_preview": "Q3",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_RT_001",
+      "expected": "$14.99 (base $9.99 \u00d7 2 = $19.98, then 25% off = $14.985)",
+      "actual_preview": "$14.99\n\n**Calculation:**\n1. Base international rate for $120 order: $9.99 (qualifies for over $100 reduction)\n2. Express",
+      "original": false,
+      "smart": true
+    },
+    {
+      "trial_id": "ADV_RT_002",
+      "expected": "No (time-based override supersedes C-level exception)",
+      "actual_preview": "no",
+      "original": false,
+      "smart": true
+    }
+  ],
+  "by_difficulty": {
+    "medium": {
+      "n": 6,
+      "orig": 1,
+      "smart": 5
+    },
+    "hard": {
+      "n": 5,
+      "orig": 1,
+      "smart": 4
+    },
+    "easy": {
+      "n": 1,
+      "orig": 1,
+      "smart": 1
+    }
+  },
+  "by_category": {
+    "structural_ambiguity": {
+      "n": 3,
+      "orig": 0,
+      "smart": 1
+    },
+    "semantic_interference": {
+      "n": 3,
+      "orig": 1,
+      "smart": 3
+    },
+    "positional_bias": {
+      "n": 2,
+      "orig": 2,
+      "smart": 2
+    },
+    "format_breaking": {
+      "n": 2,
+      "orig": 0,
+      "smart": 2
+    },
+    "reasoning_trap": {
+      "n": 2,
+      "orig": 0,
+      "smart": 2
+    }
+  }
+}
